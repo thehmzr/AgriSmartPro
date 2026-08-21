@@ -46,12 +46,16 @@ skips whatever is already done.
 
 | Path | What it does |
 | --- | --- |
-| `/` | landing page, sign in through Firebase |
+| `/` | landing page |
 | `/index` | yield prediction form |
 | `/index1` | crop recommendation form |
 | `/fertilizer` | fertilizer advice form |
 | `/Dashboard` | lab admin dashboard |
-| `/StockManagement` | stock table |
+| `/StockManagement` | stock, backed by sqlite |
+
+There is no login. The pages originally signed in through Firebase, but that
+project has been shut down, so the buttons just open the app. Nothing is
+behind a password.
 
 ### The models
 
@@ -73,6 +77,13 @@ write-up from `utils/fertilizer.py`.
 
 The notebooks read their CSVs from alongside them, so start Jupyter inside
 `backend/notebooks/`.
+
+### Stock
+
+Add, look up, edit and delete products by id. Stored in `backend/stock.db`,
+which is created on first run. There is a small JSON API behind the page:
+`GET /api/stock`, `GET|DELETE /api/stock/<id>`, and `POST /api/stock` to
+insert or update.
 
 ## The app
 
