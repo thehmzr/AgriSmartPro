@@ -330,11 +330,6 @@ Welcome to AgriSmartPro</h2>
                     <span>Password</span>
                     <input type="password" id="login_password" name="login_password"/>
                 </label>
-                <p class="forgot-password" id="forgot_password"  style="  margin-top: 10px;
-    margin-bottom: 10px;
-	margin-left: 150px;
-	color:#E2ECEC;
-    text-transform: uppercase;">Forgot password?</p>
                 <button type="button" class="btn btn-success" id="login" name="login" style="  margin-top: 40px;
     margin-bottom: 20px;
 	margin-left: 160px;
@@ -382,114 +377,16 @@ Welcome to AgriSmartPro</h2>
     </div>
 </div>
 </body>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCe3VgdwxxivW5VK8tZYpACeAifWSkFCCs",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const auth = getAuth();
-  console.log(app);
-
-  //----- New Registration code start
-  document.getElementById("register").addEventListener("click", function() {
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    // For new registration
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        alert("Registration successfully!!");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorMessage);
-        alert(error);
-      });
+<script>
+  // there is no authentication behind this page any more; the firebase
+  // project it used was shut down. the buttons just open the app.
+  document.getElementById("login").addEventListener("click", function () {
+    window.location.href = "/Dashboard";
   });
-  //----- End
 
-  //----- Login code start
-  document.getElementById("login").addEventListener("click", function() {
-    var email = document.getElementById("login_email").value;
-    var password = document.getElementById("login_password").value;
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        alert(user.email + " Login successfully!!!");
-          window.location.href = "{{ url_for('dashboard') }}";
-        document.getElementById('logout').style.display = 'block';
-
-        // Redirect to dashboard page
-
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        alert(errorMessage);
-      });
-});
-
-
-  //----- Forgot Password code start
-  document.getElementById("forgot_password").addEventListener("click", function() {
-    var email = prompt("Please enter your email to reset password:");
-    if (email != null && email != "") {
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          alert("Password reset email sent to " + email);
-        })
-        .catch((error) => {
-          const errorMessage = error.message;
-          console.log(errorMessage);
-          alert(errorMessage);
-        });
-    }
+  document.getElementById("register").addEventListener("click", function () {
+    window.location.href = "/Dashboard";
   });
-  //----- End
-
-  //----- Logout code start
-  document.getElementById("logout").addEventListener("click", function() {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      console.log('Sign-out successful.');
-      alert('Sign-out successful.');
-      document.getElementById('logout').style.display = 'none';
-    }).catch((error) => {
-      // An error happened.
-      console.log('An error happened.');
-    });
-  });
-  //----- End
-
-
-
 </script>
 <script type="module">
     document.querySelector('.img__btn').addEventListener('click', function() {

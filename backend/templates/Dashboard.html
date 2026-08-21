@@ -195,40 +195,5 @@
 
     </div>
 </div>
-<script>
-// Initialize Firebase
-var firebaseConfig = {
-    apiKey: "AIzaSyCe3VgdwxxivW5VK8tZYpACeAifWSkFCCs",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Get a reference to the auth service
-var auth = firebase.auth();
-
-// Logout function
-function logout() {
-  auth.signOut().then(function() {
-    // Sign-out successful.
-    window.location.href =  "{{ url_for('demo') }}";
-  }).catch(function(error) {
-    // An error happened.
-    console.error("Logout Error:", error);
-  });
-}
-
-// Add event listener to the logout button
-document.getElementById("logout").addEventListener("click", function(event) {
-  event.preventDefault(); // Prevent default link behavior
-  logout(); // Call logout function
-});
-</script>
 </body>
 </html>

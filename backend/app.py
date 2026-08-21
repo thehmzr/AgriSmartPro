@@ -1,4 +1,3 @@
-import app
 from flask import Flask, render_template, request, jsonify
 from markupsafe import Markup
 from utils.fertilizer import fertilizer_dic
@@ -22,9 +21,6 @@ ms = pickle.load(open('minmaxscaler.pkl','rb'))
 app = Flask(__name__)
 
 
-@app.route('/reset')
-def reset():
-    return render_template('reset.html')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -42,10 +38,6 @@ def demo():
 @ app.route('/Dashboard')
 def dashboard():
     return render_template('Dashboard.html')
-@ app.route('/test')
-def test():
-    return render_template('test.html')
-
 @ app.route('/StockManagement')
 def stock():
     return render_template('stock.html')
