@@ -89,7 +89,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUs3VsYbP3DKNpSr4uDjLVf_UMjZdye3vd5A&s');
+            background-image: url('/static/dashboard-bg.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -158,18 +158,19 @@
 </head>
 <body>
     <div class="header">
-        <div class="header-left">
-            <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSuKhHx2tKb5-vo_UP7lB0KW34fw8mKO0m5-gTG1EpBnC-UuPOP" style="width:60px; border-radius: 50%;">
-            <h2 style="color:white;">AgriSmartPro</h2>
-        </div>
-        <div class="header-right">
-            <a href="{{ url_for('stock') }}">Stock Management</a>
-            <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
-            <a href="{{ url_for('index') }}">Yield Prediction</a>
-            <a href="{{ url_for('index1') }}">Crop Recommendation</a>
-            <a href="{{ url_for('demo') }}" id="logout">Logout</a>
-        </div>
+    <div class="header-left">
+        <img src="/static/logo.png" style="width:60px; border-radius: 50%;">
+        <a href="{{ url_for('dashboard') }}" class="logo">AgriSmartPro</a>
     </div>
+    <div class="header-right">
+        <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+        <a href="{{ url_for('stock') }}">Stock Management</a>
+        <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
+        <a href="{{ url_for('index') }}">Yield Prediction</a>
+        <a href="{{ url_for('index1') }}">Crop Recommendation</a>
+        <a href="{{ url_for('demo') }}">Logout</a>
+    </div>
+</div>
 
 <div class="container">
     <header>
@@ -177,7 +178,7 @@
     </header>
     <div class="button-section">
         <a href="{{ url_for('stock') }}" data-text="Stock Management">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmww_p-Q6B0ZZPUR_XObUrZGPelIS8waEQRg&s" alt="Stock Management">
+            <img src="/static/wheat.jpg" alt="Stock Management">
 
         </a>
 
@@ -190,45 +191,10 @@
 
         </a>
         <a href="{{ url_for('index1') }}" data-text="Crop Recommendation">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi9TKhfdWCXQ2531RO3IITN76wj1bzlk6riw&s" alt="Crop Recommendation">
+            <img src="/static/tile-crop.jpg" alt="Crop Recommendation">
         </a>
 
     </div>
 </div>
-<script>
-// Initialize Firebase
-var firebaseConfig = {
-    apiKey: "AIzaSyCe3VgdwxxivW5VK8tZYpACeAifWSkFCCs",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Get a reference to the auth service
-var auth = firebase.auth();
-
-// Logout function
-function logout() {
-  auth.signOut().then(function() {
-    // Sign-out successful.
-    window.location.href =  "{{ url_for('demo') }}";
-  }).catch(function(error) {
-    // An error happened.
-    console.error("Logout Error:", error);
-  });
-}
-
-// Add event listener to the logout button
-document.getElementById("logout").addEventListener("click", function(event) {
-  event.preventDefault(); // Prevent default link behavior
-  logout(); // Call logout function
-});
-</script>
 </body>
 </html>

@@ -1,11 +1,12 @@
-import app
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from markupsafe import Markup
 from utils.fertilizer import fertilizer_dic
 import pandas as pd
 import numpy as np
 import pickle
 import sklearn
+import sqlite3
+import os
 
 
 print(sklearn.__version__)
@@ -16,13 +17,14 @@ model = pickle.load(open('model.pkl','rb'))
 sc = pickle.load(open('standscaler.pkl','rb'))
 ms = pickle.load(open('minmaxscaler.pkl','rb'))
 
+# the areas and crops the yield model was actually trained on
+_ohe = dict((name, t) for name, t, _ in preprocessor.transformers_)['OHE']
+AREAS, ITEMS = [list(c) for c in _ohe.categories_]
+
 # flask app
 app = Flask(__name__)
 
 
-@app.route('/reset')
-def reset():
-    return render_template('reset.html')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -40,10 +42,6 @@ def demo():
 @ app.route('/Dashboard')
 def dashboard():
     return render_template('Dashboard.html')
-@ app.route('/test')
-def test():
-    return render_template('test.html')
-
 @ app.route('/StockManagement')
 def stock():
     return render_template('stock.html')
@@ -57,7 +55,16 @@ def predict1():
         Area = request.form['Area']
         Item = request.form['Item']
 
-        features = np.array([[Year, average_rain_fall_mm_per_year, pesticides_tonnes, avg_temp, Area, Item]], dtype=object)
+        if Area not in AREAS:
+            return render_template('index.html', error="%s is not one of the countries this model was trained on." % Area)
+        if Item not in ITEMS:
+            return render_template('index.html', error="%s is not one of the crops this model was trained on." % Item)
+        try:
+            rain, pest, temp = (float(average_rain_fall_mm_per_year), float(pesticides_tonnes), float(avg_temp))
+        except ValueError:
+            return render_template('index.html', error="Rainfall, pesticides and temperature all need to be numbers.")
+
+        features = np.array([[Year, rain, pest, temp, Area, Item]], dtype=object)
         transformed_features = preprocessor.transform(features)
         prediction = dtr.predict(transformed_features).reshape(1, -1)
 
@@ -73,7 +80,10 @@ def predict2():
     ph = request.form['Ph']
     rainfall = request.form['Rainfall']
 
-    feature_list = [N, P, K, temp, humidity, ph, rainfall]
+    try:
+        feature_list = [float(v) for v in (N, P, K, temp, humidity, ph, rainfall)]
+    except ValueError:
+        return render_template('index1.html', result="Every field needs to be a number.")
     single_pred = np.array(feature_list).reshape(1, -1)
 
     scaled_features = ms.transform(single_pred)
@@ -93,40 +103,101 @@ def predict2():
 @ app.route('/fertilizer-predict', methods=['POST'])
 def fert_recommend():
     crop_name = str(request.form['cropname'])
-    N = int(request.form['nitrogen'])
-    P = int(request.form['phosphorous'])
-    K = int(request.form['pottasium'])
-    # ph = float(request.form['ph'])
+    try:
+        N = float(request.form['nitrogen'])
+        P = float(request.form['phosphorous'])
+        K = float(request.form['pottasium'])
+    except ValueError:
+        return render_template('fertilizer.html',
+                               recommendation="Nitrogen, phosphorus and potassium all need to be numbers.")
 
     df = pd.read_csv('fertilizer.csv')
+    row = df[df['Crop'] == crop_name]
+    if row.empty:
+        return render_template('fertilizer.html',
+                               recommendation=Markup("There is no reference data for <i>%s</i>. "
+                                                     "Pick a crop from the list." % crop_name))
 
-    nr = df[df['Crop'] == crop_name]['N'].iloc[0]
-    pr = df[df['Crop'] == crop_name]['P'].iloc[0]
-    kr = df[df['Crop'] == crop_name]['K'].iloc[0]
+    n = row['N'].iloc[0] - N
+    p = row['P'].iloc[0] - P
+    k = row['K'].iloc[0] - K
 
-    n = nr - N
-    p = pr - P
-    k = kr - K
-    temp = {abs(n): "N", abs(p): "P", abs(k): "K"}  #ensure values are non-negative
-    max_value = temp[max(temp.keys())]
-    if max_value == "N":
-        if n < 0:
-            key = 'NHigh'
-        else:
-            key = "Nlow"
-    elif max_value == "P":
-        if p < 0:
-            key = 'PHigh'
-        else:
-            key = "Plow"
-    else:
-        if k < 0:
-            key = 'KHigh'
-        else:
-            key = "Klow"
+    # biggest gap wins; ties fall to N, then P, then K
+    gaps = [(abs(n), 0, 'N'), (abs(p), 1, 'P'), (abs(k), 2, 'K')]
+    gap, _, key = max(gaps, key=lambda t: (t[0], -t[1]))
+    if gap == 0:
+        return render_template('fertilizer.html',
+                               recommendation=Markup("The N, P and K levels of your soil already match what "
+                                                     "<i>%s</i> needs. Nothing to correct." % crop_name))
 
-    response = Markup(str(fertilizer_dic[key]))
+    diff = {'N': n, 'P': p, 'K': k}[key]
+    response = Markup(str(fertilizer_dic[key + ('High' if diff < 0 else 'low')]))
 
     return render_template('fertilizer.html', recommendation=response)
+
+# stock management, backed by a local sqlite file
+
+STOCK_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stock.db')
+
+
+def stock_db():
+    conn = sqlite3.connect(STOCK_DB)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_stock_db():
+    with stock_db() as conn:
+        conn.execute("""CREATE TABLE IF NOT EXISTS stock (
+            product_id TEXT PRIMARY KEY,
+            product_name TEXT,
+            product_quantity TEXT,
+            product_price TEXT)""")
+
+
+init_stock_db()
+
+
+@app.route('/api/stock/<pid>', methods=['GET'])
+def stock_read(pid):
+    with stock_db() as conn:
+        row = conn.execute('SELECT * FROM stock WHERE product_id = ?', (pid,)).fetchone()
+    if row is None:
+        return jsonify({'error': 'not found'}), 404
+    return jsonify(dict(row))
+
+
+@app.route('/api/stock', methods=['POST'])
+def stock_insert():
+    d = request.get_json(silent=True) or {}
+    pid = (d.get('product_id') or '').strip()
+    if not pid:
+        return jsonify({'error': 'product id is required'}), 400
+    with stock_db() as conn:
+        conn.execute("""INSERT INTO stock VALUES (?, ?, ?, ?)
+                        ON CONFLICT(product_id) DO UPDATE SET
+                        product_name = excluded.product_name,
+                        product_quantity = excluded.product_quantity,
+                        product_price = excluded.product_price""",
+                     (pid, d.get('product_name'), d.get('product_quantity'), d.get('product_price')))
+    return jsonify({'ok': True})
+
+
+@app.route('/api/stock/<pid>', methods=['DELETE'])
+def stock_delete(pid):
+    with stock_db() as conn:
+        cur = conn.execute('DELETE FROM stock WHERE product_id = ?', (pid,))
+    if cur.rowcount == 0:
+        return jsonify({'error': 'not found'}), 404
+    return jsonify({'ok': True})
+
+
+@app.route('/api/stock', methods=['GET'])
+def stock_list():
+    with stock_db() as conn:
+        rows = conn.execute('SELECT * FROM stock ORDER BY product_id').fetchall()
+    return jsonify([dict(r) for r in rows])
+
+
 if __name__ == "__main__":
     app.run(debug=True)

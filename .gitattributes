@@ -1,0 +1,4 @@
+# keep every file byte for byte as it was written. the backend was
+# authored on windows and uses CRLF; git must not rewrite that on
+# checkout or commit, on any platform.
+* -text
