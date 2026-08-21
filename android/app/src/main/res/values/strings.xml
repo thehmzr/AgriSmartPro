@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AgriSmartPro</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Store</string>
+    <string name="title_notifications">Agri AI</string>
+
+    <string name="default_web_client_id">511944634839-nad4t7f4n6md5bfksl3j912udo125do3.apps.googleusercontent.com</string>
+
+</resources>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/buttonContainer"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/plotNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plot Number"
+                android:textSize="18sp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/landInPlot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Land in Plot"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/sowingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sowing Date"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/seed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seed"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/seedQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seed Quantity"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/landPreparationExpenses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Land Preparation Expenses"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="132dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/updateButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="48dp"
+                android:background="@drawable/button_update_outline"
+                android:contentDescription="Update"
+                android:src="@drawable/ic_update" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/button_delete_outline"
+                android:contentDescription="Delete"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
