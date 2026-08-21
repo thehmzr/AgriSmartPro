@@ -108,7 +108,7 @@ button {
     top: 0;
     width: 900px;
     height: 100%;
-    background-image: url("ext.jpg");
+    background-image: url("/static/rice-field.jpg");
     opacity: .8;
     background-size: cover; /* Make background non-repeating */
     -webkit-transition: -webkit-transform 1.2s ease-in-out;
@@ -319,7 +319,7 @@ input {
         <form name="login_form" id="login_form" method="post" action="{{ url_for('dashboard') }}" enctype="multipart/form-data">
             <div class="form sign-in">
 
-                <h2 style="color: #E2ECEC" > <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSuKhHx2tKb5-vo_UP7lB0KW34fw8mKO0m5-gTG1EpBnC-UuPOP" style="width:60px; border-radius: 50%; align:center;" >
+                <h2 style="color: #E2ECEC" > <img src="/static/logo.png" style="width:60px; border-radius: 50%; align:center;" >
 Welcome to AgriSmartPro</h2>
 
                 <label>
@@ -357,7 +357,7 @@ Welcome to AgriSmartPro</h2>
             </div>
             <form name="registration_form" id="registration_form" method="post" action="{{ url_for('demo') }}" enctype="multipart/form-data" >
                 <div class="form sign-up" >
-                    <h2 style="color: #E2ECEC"> <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSuKhHx2tKb5-vo_UP7lB0KW34fw8mKO0m5-gTG1EpBnC-UuPOP" style="width:60px; border-radius: 50%; align:center;" >Create your Account</h2>
+                    <h2 style="color: #E2ECEC"> <img src="/static/logo.png" style="width:60px; border-radius: 50%; align:center;" >Create your Account</h2>
                     <label>
                         <span>Name</span>
                         <input type="text" id="name" name="name" required>
