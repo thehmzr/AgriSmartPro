@@ -1,11 +1,13 @@
 import app
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from markupsafe import Markup
 from utils.fertilizer import fertilizer_dic
 import pandas as pd
 import numpy as np
 import pickle
 import sklearn
+import sqlite3
+import os
 
 
 print(sklearn.__version__)
@@ -128,5 +130,70 @@ def fert_recommend():
     response = Markup(str(fertilizer_dic[key]))
 
     return render_template('fertilizer.html', recommendation=response)
+
+# stock management, backed by a local sqlite file
+
+STOCK_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stock.db')
+
+
+def stock_db():
+    conn = sqlite3.connect(STOCK_DB)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_stock_db():
+    with stock_db() as conn:
+        conn.execute("""CREATE TABLE IF NOT EXISTS stock (
+            product_id TEXT PRIMARY KEY,
+            product_name TEXT,
+            product_quantity TEXT,
+            product_price TEXT)""")
+
+
+init_stock_db()
+
+
+@app.route('/api/stock/<pid>', methods=['GET'])
+def stock_read(pid):
+    with stock_db() as conn:
+        row = conn.execute('SELECT * FROM stock WHERE product_id = ?', (pid,)).fetchone()
+    if row is None:
+        return jsonify({'error': 'not found'}), 404
+    return jsonify(dict(row))
+
+
+@app.route('/api/stock', methods=['POST'])
+def stock_insert():
+    d = request.get_json(silent=True) or {}
+    pid = (d.get('product_id') or '').strip()
+    if not pid:
+        return jsonify({'error': 'product id is required'}), 400
+    with stock_db() as conn:
+        conn.execute("""INSERT INTO stock VALUES (?, ?, ?, ?)
+                        ON CONFLICT(product_id) DO UPDATE SET
+                        product_name = excluded.product_name,
+                        product_quantity = excluded.product_quantity,
+                        product_price = excluded.product_price""",
+                     (pid, d.get('product_name'), d.get('product_quantity'), d.get('product_price')))
+    return jsonify({'ok': True})
+
+
+@app.route('/api/stock/<pid>', methods=['DELETE'])
+def stock_delete(pid):
+    with stock_db() as conn:
+        cur = conn.execute('DELETE FROM stock WHERE product_id = ?', (pid,))
+    if cur.rowcount == 0:
+        return jsonify({'error': 'not found'}), 404
+    return jsonify({'ok': True})
+
+
+@app.route('/api/stock', methods=['GET'])
+def stock_list():
+    with stock_db() as conn:
+        rows = conn.execute('SELECT * FROM stock ORDER BY product_id').fetchall()
+    return jsonify([dict(r) for r in rows])
+
+
 if __name__ == "__main__":
     app.run(debug=True)
