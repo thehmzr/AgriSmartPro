@@ -93,18 +93,19 @@
 
   <body>
     <div class="header">
-      <div class="header-left">
+    <div class="header-left">
         <img src="/static/logo.png" style="width:60px; border-radius: 50%;">
-        <a href="#default" class="logo">AgriSmartPro</a>
-      </div>
-      <div class="header-right">
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('stock') }}">Stock Management</a>
-            <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
-            <a href="{{ url_for('index') }}">Yield Prediction</a>
-
-        </div>
+        <a href="{{ url_for('dashboard') }}" class="logo">AgriSmartPro</a>
     </div>
+    <div class="header-right">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('stock') }}">Stock Management</a>
+        <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
+        <a href="{{ url_for('index') }}">Yield Prediction</a>
+        <a href="{{ url_for('index1') }}" class="active">Crop Recommendation</a>
+        <a href="{{ url_for('demo') }}">Logout</a>
+    </div>
+</div>
 
   <div class="container my-3 mt-3">
       <h2 class="text-center">Crop Recommendation System </h2>

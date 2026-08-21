@@ -89,7 +89,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('/static/smart-agriculture.jpg');
+            background-image: url('/static/dashboard-bg.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -158,18 +158,19 @@
 </head>
 <body>
     <div class="header">
-        <div class="header-left">
-            <img src="/static/logo.png" style="width:60px; border-radius: 50%;">
-            <h2 style="color:white;">AgriSmartPro</h2>
-        </div>
-        <div class="header-right">
-            <a href="{{ url_for('stock') }}">Stock Management</a>
-            <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
-            <a href="{{ url_for('index') }}">Yield Prediction</a>
-            <a href="{{ url_for('index1') }}">Crop Recommendation</a>
-            <a href="{{ url_for('demo') }}" id="logout">Logout</a>
-        </div>
+    <div class="header-left">
+        <img src="/static/logo.png" style="width:60px; border-radius: 50%;">
+        <a href="{{ url_for('dashboard') }}" class="logo">AgriSmartPro</a>
     </div>
+    <div class="header-right">
+        <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+        <a href="{{ url_for('stock') }}">Stock Management</a>
+        <a href="{{ url_for('fertilizer_recommendation') }}">Fertilizer Optimization</a>
+        <a href="{{ url_for('index') }}">Yield Prediction</a>
+        <a href="{{ url_for('index1') }}">Crop Recommendation</a>
+        <a href="{{ url_for('demo') }}">Logout</a>
+    </div>
+</div>
 
 <div class="container">
     <header>
@@ -190,7 +191,7 @@
 
         </a>
         <a href="{{ url_for('index1') }}" data-text="Crop Recommendation">
-            <img src="/static/corn-field.jpg" alt="Crop Recommendation">
+            <img src="/static/tile-crop.jpg" alt="Crop Recommendation">
         </a>
 
     </div>
