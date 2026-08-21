@@ -1,16 +1,14 @@
 # AgriSmartPro
 
-A farm management project with two halves: an Android app farmers use to track
-their crops and stock, and a Python backend that recommends a crop, predicts a
-yield and suggests fertilizer from soil and weather figures.
+A farm management project with two halves: 
+an Android app farmers use to track their crops and stock,
+and a Python backend that recommends a crop, predicts a yield and suggests fertilizer from soil and weather figures.
 
-Final year project for BS Software Engineering at the University of Lahore,
-finished in 2024. Built with Aymen Akram, supervised by Ms. Nadia Mushtaq
-Gardazi.
+FYP for BS SE at UOL, finished 2024 Sep.
 
 ![Home screen](docs/images/home.png)
 
-## What's here
+## Directories
 
 ```
 android/    the mobile app, Kotlin
@@ -22,10 +20,10 @@ The two halves ran separately. The app keeps its own data on the phone and
 talks to Firebase and Gemini directly; the backend serves its own web pages for
 the prediction tools and the lab dashboard.
 
-## The backend
+## backend
 
-Needs Python 3.8 to 3.11. Not 3.12 or newer, because the saved models were
-trained with scikit-learn 1.2.2 and that version has no build for it.
+Python 3.8 to 3.11. Not 3.12 or newer,saved models were
+trained with scikit-learn 1.2.2.
 
 ```bash
 git clone https://github.com/thehmzr/agrismartpro.git && cd agrismartpro
@@ -66,28 +64,11 @@ temperature, humidity, pH and rainfall, and returns one of 22 crops. Trained in
 `notebooks/Crop Recommendation.ipynb` on `Crop_recommendation.csv`, saved as
 `model.pkl` with `standscaler.pkl` and `minmaxscaler.pkl`.
 
-Yield prediction is a decision tree over rainfall, pesticide tonnage, average
-temperature, country and crop, and returns hectograms per hectare. Trained in
-`notebooks/Yield Prediction.ipynb` on `yield_df (1).csv`, saved as `dtr.pkl`
-with `preprocessor .pkl`.
 
-Fertilizer advice isn't learned. It reads `fertilizer.csv` for the crop's ideal
-N, P and K, finds which of the three is furthest off, and returns the matching
-write-up from `utils/fertilizer.py`.
 
-The notebooks read their CSVs from alongside them, so start Jupyter inside
-`backend/notebooks/`.
+## android app
 
-### Stock
-
-Add, look up, edit and delete products by id. Stored in `backend/stock.db`,
-which is created on first run. There is a small JSON API behind the page:
-`GET /api/stock`, `GET|DELETE /api/stock/<id>`, and `POST /api/stock` to
-insert or update.
-
-## The app
-
-Open `android/` in Android Studio and let it sync. Kotlin, minimum SDK 25,
+Open `android/` in Android Studio ,let it sync. Kotlin, minimum SDK 25,
 targets 34, Gradle 8.7. Needs JDK 17.
 
 From the command line:
