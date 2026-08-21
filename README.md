@@ -1,6 +1,6 @@
 # AgriSmartPro
 
-A farm management project with two halves: 
+FYP ...  farm management project with two,
 an Android app farmers use to track their crops and stock,
 and a Python backend that recommends a crop, predicts a yield and suggests fertilizer from soil and weather figures.
 
@@ -8,7 +8,7 @@ FYP for BS SE at UOL, finished 2024 Sep.
 
 ![Home screen](docs/images/home.png)
 
-## Directories
+## folders
 
 ```
 android/    the mobile app, Kotlin
@@ -86,7 +86,7 @@ echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
 The apk lands in `app/build/outputs/apk/debug/`. Install it with
 `adb install -r app/build/outputs/apk/debug/app-debug.apk`.
 
-Built and run on a phone running Android 16, well past the 34 it targets.
+Built and run on a phone running Android 16
 
 Sign-in, registration and password reset go through Firebase Auth, with Google
 sign-in alongside. Crops, seeds, fertilizers and pesticides live in a local
