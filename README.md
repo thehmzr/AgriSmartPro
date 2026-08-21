@@ -88,7 +88,20 @@ insert or update.
 ## The app
 
 Open `android/` in Android Studio and let it sync. Kotlin, minimum SDK 25,
-targets 34. Gradle 8.7.
+targets 34, Gradle 8.7. Needs JDK 17.
+
+From the command line:
+
+```bash
+cd android
+echo "sdk.dir=$HOME/Library/Android/sdk" > local.properties
+./gradlew assembleDebug
+```
+
+The apk lands in `app/build/outputs/apk/debug/`. Install it with
+`adb install -r app/build/outputs/apk/debug/app-debug.apk`.
+
+Built and run on a phone running Android 16, well past the 34 it targets.
 
 Sign-in, registration and password reset go through Firebase Auth, with Google
 sign-in alongside. Crops, seeds, fertilizers and pesticides live in a local
@@ -100,6 +113,9 @@ what comes back.
 
 The Gemini key is blank in `ui/notifications/NotificationsViewModel.kt`. Put
 your own in to use the Agri AI tab; the rest of the app runs without it.
+
+Google sign-in only works for a build signed with the key registered in the
+Firebase project, so a debug build falls back to email and password.
 
 ## The report
 
