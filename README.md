@@ -13,7 +13,7 @@ FYP for BS SE at UOL, finished 2024 Sep.
 ```
 android/    the mobile app, Kotlin
 backend/    Flask server and the trained models
-docs/       the project report and screenshots
+docs/       screenshots
 ```
 
 The two halves ran separately. The app keeps its own data on the phone and
@@ -54,6 +54,10 @@ skips whatever is already done.
 There is no login. The pages originally signed in through Firebase, but that
 project has been shut down, so the buttons just open the app. Nothing is
 behind a password.
+
+![Dashboard](docs/images/web-dashboard.jpg)
+
+![Crop recommendation](docs/images/web-crop-recommendation.jpg)
 
 ### The models
 
@@ -97,8 +101,3 @@ your own in to use the Agri AI tab; the rest of the app runs without it.
 
 Google sign-in only works for a build signed with the key registered in the
 Firebase project, so a debug build falls back to email and password.
-
-## The report
-
-`docs/AgriSmartPro-FYP-Phase-II.pdf` is the phase II submission, 215 pages.
-Requirements, use cases, the diagrams and the test cases.
