@@ -23,3 +23,7 @@ serviceAccountKey.json
 .idea/
 .vscode/
 .DS_Store
+
+# local-only archive: every draft version, decks, design work, and the
+# firebase service account key. kept on disk, never published.
+archive/
