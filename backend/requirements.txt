@@ -1,0 +1,6 @@
+# scikit-learn is pinned to the version the .pkl models were trained with.
+# Newer versions refuse to unpickle them.
+Flask==3.0.3
+pandas==2.0.3
+numpy==1.24.4
+scikit-learn==1.2.2
