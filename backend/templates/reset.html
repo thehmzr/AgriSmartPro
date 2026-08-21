@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forgot Password</title>
+</head>
+<body>
+    <h2>Forgot Password</h2>
+    <form id="forgot_password_form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit">Reset Password</button>
+    </form>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js"></script>
+    <script>
+          const firebaseConfig = {
+          apiKey: "AIzaSyCe3VgdwxxivW5VK8tZYpACeAifWSkFCCs",
+          authDomain: "agri-5a738.firebaseapp.com",
+          databaseURL: "https://agri-5a738-default-rtdb.firebaseio.com",
+          projectId: "agri-5a738",
+          storageBucket: "agri-5a738.appspot.com",
+          messagingSenderId: "931584816149",
+          appId: "1:931584816149:web:356771f29d13dce3c68a1c",
+          measurementId: "G-5CWZK2F884"
+          };
+
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+
+  document.getElementById("forgot_password_form").addEventListener("click", function() {
+    var email = prompt("Please enter your email to reset password:");
+    if (email != null && email != "") {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          alert("Password reset email sent to " + email);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          alert(errorMessage);
+        });
+    }
+  });
+  </script>
+</body>
+</html>

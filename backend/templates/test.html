@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- Bootstrap theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Login/Sign up</title>
+  <style>
+    /* Your CSS styles here */
+  </style>
+</head>
+
+<body>
+  <br>
+  <br>
+  <div class="container">
+    <div class="cont">
+      <form name="login_form" id="login_form" method="post" action="{{ url_for('dashboard') }}" enctype="multipart/form-data">
+          <p class="forgot-password" id="forgot_password"  style="  margin-top: 10px;
+    margin-bottom: 10px;
+	margin-left: 150px;
+    text-transform: uppercase;">Forgot password?</p>
+      </form>
+      <div class="sub-cont">
+        <!-- Your HTML form for registration here -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+   const express = require('express');
+const admin = require('firebase-admin');
+const bodyParser = require('body-parser');
+
+const app = express();
+
+// Initialize Firebase Admin SDK
+const serviceAccount = require('agri-5a738-firebase-adminsdk-fqb7g-e4aab81ecd.json'); // Replace with your service account key file
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://agri-5a738-default-rtdb.firebaseio.com' // Replace with your Firebase project URL
+});
+
+app.use(bodyParser.json());
+
+// Endpoint to handle password reset
+app.post('/resetPassword', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Check if the email exists in Firebase authentication
+    const userRecord = await admin.auth().getUserByEmail(email);
+
+    // Email exists, send password reset email
+    await admin.auth().sendPasswordResetEmail(email);
+
+    res.status(200).json({ message: 'Password reset email sent successfully' });
+  } catch (error) {
+    // Email does not exist or other error occurred
+    console.error('Error sending password reset email:', error);
+    res.status(400).json({ error: 'Error sending password reset email' });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+
+  </script>
+
+  <script type="module">
+    document.querySelector('.img__btn').addEventListener('click', function() {
+      document.querySelector('.cont').classList.toggle('s--signup');
+    });
+
+    document.getElementById("forgot_password").addEventListener("click", function() {
+      var email = prompt("Please enter your email to reset password:");
+      if (email) {
+        fetch('/resetPassword', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+          })
+          .then(response => {
+            if (response.ok) {
+              alert("Password reset email sent successfully");
+            } else {
+              throw new Error('Failed to send password reset email');
+            }
+          })
+          .catch(error => {
+            console.error('Error sending password reset email:', error);
+            alert("An error occurred. Please try again later.");
+          });
+      }
+    });
+  </script>
+</body>
+
+</html>
