@@ -1,0 +1,25 @@
+# python
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# android
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# firebase service account credentials, never commit these
+*-firebase-adminsdk-*.json
+serviceAccountKey.json
+
+# editors and os
+.idea/
+.vscode/
+.DS_Store
